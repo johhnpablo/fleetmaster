@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\VehicleController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -13,9 +14,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
-    Route::get('vehicles', function () {
-        return Inertia::render('vehicles/Vehicle');
-    })->name('vehicle');
+    Route::get('vehicles', [VehicleController::class, 'index'])->name('vehicles');
+    Route::get('vehicles/{id}', [VehicleController::class, 'edit'])->name('vehicles.edit');
 });
 
 

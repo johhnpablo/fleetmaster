@@ -2,6 +2,7 @@
 import { Head, Link } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
+import { router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import {
     Table,
@@ -21,35 +22,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { MoreHorizontal } from 'lucide-vue-next';
 
-const vehicles = ref([
-    {
-        id: 1,
-        model: 'Civic',
-        brand: 'Honda',
-        year: 2020,
-        color: '#808080', // Cinza
-        price: 95000.00,
-        status: 'ativo',
-    },
-    {
-        id: 2,
-        model: 'Corolla',
-        brand: 'Toyota',
-        year: 2019,
-        color: '#0000FF', // Azul
-        price: 90000.00,
-        status: 'inativo',
-    },
-    {
-        id: 3,
-        model: 'Golf',
-        brand: 'Volkswagen',
-        year: 2021,
-        color: '#FF0000', // Vermelho
-        price: 85000.00,
-        status: 'em_manutenção',
-    },
-]);
+defineProps({vehicles: Object})
+
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -65,7 +39,7 @@ const formatPrice = (price) => {
 };
 
 const editVehicle = (id) => {
-    alert(`Editar veículo com ID: ${id}`);
+    router.get(route('vehicles.edit', id))
 };
 
 const deleteVehicle = (id) => {
@@ -73,6 +47,29 @@ const deleteVehicle = (id) => {
         alert(`Excluir veículo com ID: ${id}`);
     }
 };
+
+const getBadgeVariant = (status) => {
+    const variants = {
+        active: 'default',
+        inactive: 'destructive',
+        in_maintenance: 'secondary',
+        in_route: 'outline'
+    };
+
+    return variants[status] || 'default';
+}
+
+const getTextStatus = (status) => {
+    const variants = {
+        active: 'Ativo',
+        inactive: 'Inativo',
+        in_maintenance: 'Em manutenção',
+        in_route: 'Em rota'
+    };
+
+    return variants [status] || 'Sem Informações'
+}
+
 </script>
 <template>
     <Head title="Vehicles" />
@@ -94,6 +91,7 @@ const deleteVehicle = (id) => {
                             <TableHead>Cor</TableHead>
                             <TableHead>Preço</TableHead>
                             <TableHead>Status</TableHead>
+                            <TableHead>Manutenção</TableHead>
                             <TableHead>Ações</TableHead>
                         </TableRow>
                     </TableHeader>
@@ -107,8 +105,16 @@ const deleteVehicle = (id) => {
                             </TableCell>
                             <TableCell>{{ formatPrice(vehicle.price) }}</TableCell>
                             <TableCell>
-                                <Badge :variant="vehicle.status === 'ativo' ? 'default' : 'secondary'">
-                                    {{ vehicle.status }}
+                                <Badge :variant="getBadgeVariant(vehicle.status)">
+                                    {{ getTextStatus(vehicle.status) }}
+                                </Badge>
+                            </TableCell>
+                            <TableCell>
+                                <Badge :variant="active" v-if="vehicle.maintenance_last_6_months">
+                                    Em dia
+                                </Badge>
+                                <Badge variant="destructive" v-else>
+                                    Atrasada
                                 </Badge>
                             </TableCell>
                             <TableCell>

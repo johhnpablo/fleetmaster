@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('vehicles', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
             $table->string('model');
             $table->enum('status', ['active', 'inactive', 'in_maintenance', 'in_route'])->default('active');
             $table->string('brand');
@@ -22,8 +23,12 @@ return new class extends Migration
             $table->boolean('maintenance_last_6_months');
             $table->timestamps();
 
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
 
-            $table->index('brand');
+            $table->index('status');
             $table->index('color');
             $table->index('brand');
         });
