@@ -42,6 +42,8 @@ const editVehicle = (id) => {
     router.get(route('vehicles.edit', id))
 };
 
+
+
 const deleteVehicle = (id) => {
     if (confirm('Tem certeza que deseja excluir este veículo?')) {
         alert(`Excluir veículo com ID: ${id}`);
@@ -79,7 +81,7 @@ const getTextStatus = (status) => {
             <div class="p-6">
                 <div class="flex justify-between items-center mb-6">
                     <h1 class="text-2xl font-bold">Veículos</h1>
-                    <Button>Adicionar Veículo</Button>
+                    <Button @click="router.get(route('vehicles.create'))">Adicionar Veículo</Button>
                 </div>
 
                 <Table>

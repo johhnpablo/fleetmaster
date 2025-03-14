@@ -15,7 +15,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     Route::get('vehicles', [VehicleController::class, 'index'])->name('vehicles');
-    Route::get('vehicles/{id}', [VehicleController::class, 'edit'])->name('vehicles.edit');
+    Route::get('vehicles/vehicle/{id}', [VehicleController::class, 'edit'])->name('vehicles.edit');
+    Route::get('vehicles/create', [VehicleController::class, 'create'])->name('vehicles.create');
 });
 
 

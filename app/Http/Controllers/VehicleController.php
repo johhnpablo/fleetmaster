@@ -22,4 +22,9 @@ class VehicleController extends Controller
         $vehicle = $vehicleAction($request);
         return Inertia::render('vehicles/Edit', ['vehicle' => $vehicle]);
     }
+
+    public function create() : Response
+    {
+        return Inertia::render('vehicles/Create');
+    }
 }
